@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zomato Stock Prediction Concept</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+      }
+
+      h1,
+      h2 {
+        color: #cb202d;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 15px;
+      }
+
+      .concept-container {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 40px;
+      }
+
+      .input-section,
+      .output-section {
+        flex: 1;
+        background: white;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        margin-top: 0;
+        font-size: 1.5rem;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
+
+      select,
+      input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+
+      button {
+        background-color: #cb202d;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #a61a24;
+      }
+
+      .result-card {
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 20px;
+        margin-top: 20px;
+      }
+
+      .predicted-price {
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 10px 0;
+      }
+
+      .positive {
+        color: #4caf50;
+      }
+
+      .negative {
+        color: #f44336;
+      }
+
+      .confidence-meter {
+        height: 10px;
+        background: #eee;
+        border-radius: 5px;
+        margin: 15px 0;
+        overflow: hidden;
+      }
+
+      .confidence-level {
+        height: 100%;
+        background: #cb202d;
+        width: 75%;
+      }
+
+      .analysis {
+        font-style: italic;
+        color: #555;
+        margin-top: 15px;
+      }
+
+      @media (max-width: 768px) {
+        .concept-container {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Zomato Stock Prediction Website Concept</h1>
+
+    <div class="concept-container">
+      <div class="input-section">
+        <h2>Input Parameters</h2>
+
+        <div class="form-group">
+          <label for="timeframe">Prediction Timeframe</label>
+          <select id="timeframe">
+            <option value="1d">1 Day</option>
+            <option value="1w">1 Week</option>
+            <option value="1m">1 Month</option>
+            <option value="3m">3 Months</option>
+            <option value="1y">1 Year</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="model">Prediction Model</label>
+          <select id="model">
+            <option value="lstm">LSTM Neural Network</option>
+            <option value="arima">ARIMA</option>
+            <option value="prophet">Facebook Prophet</option>
+            <option value="ensemble">Ensemble Model</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="current-price">Current Price (₹)</label>
+          <input
+            type="number"
+            id="current-price"
+            value="185.45"
+            step="0.01"
+            readonly
+          />
+        </div>
+
+        <button id="predict-btn">Generate Prediction</button>
+      </div>
+
+      <div class="output-section">
+        <h2>Prediction Results</h2>
+        <p>Based on your selected parameters:</p>
+
+        <div class="result-card" id="result-card">
+          <div class="timeframe">
+            <strong>Timeframe:</strong>
+            <span id="result-timeframe">1 Week</span>
+          </div>
+          <div class="model-used">
+            <strong>Model:</strong>
+            <span id="result-model">LSTM Neural Network</span>
+          </div>
+
+          <div class="predicted-price">
+            ₹<span id="result-price">192.75</span>
+            <span class="positive" id="result-change">(+7.30, 3.94%)</span>
+          </div>
+
+          <div class="confidence"><strong>Confidence Level:</strong> 78%</div>
+          <div class="confidence-meter">
+            <div class="confidence-level" style="width: 78%"></div>
+          </div>
+
+          <div class="analysis" id="analysis">
+            Our AI model predicts an upward trend based on recent order volume
+            growth and positive sector momentum. The LSTM model has detected a
+            repeating pattern that historically leads to 5-7% gains in the
+            following week.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document
+        .getElementById("predict-btn")
+        .addEventListener("click", function () {
+          // Get input values
+          const timeframe = document.getElementById("timeframe").value;
+          const model = document.getElementById("model").value;
+
+          // Simulate processing delay
+          document.getElementById("predict-btn").textContent = "Processing...";
+          document.getElementById("predict-btn").disabled = true;
+
+          setTimeout(function () {
+            // Update results based on inputs
+            updateResults(timeframe, model);
+
+            // Reset button
+            document.getElementById("predict-btn").textContent =
+              "Generate Prediction";
+            document.getElementById("predict-btn").disabled = false;
+          }, 1000);
+        });
+
+      function updateResults(timeframe, model) {
+        // Map timeframe values to display text
+        const timeframeMap = {
+          "1d": "1 Day",
+          "1w": "1 Week",
+          "1m": "1 Month",
+          "3m": "3 Months",
+          "1y": "1 Year",
+        };
+
+        // Map model values to display text
+        const modelMap = {
+          lstm: "LSTM Neural Network",
+          arima: "ARIMA",
+          prophet: "Facebook Prophet",
+          ensemble: "Ensemble Model",
+        };
+
+        // Sample prediction data - in a real app this would come from an API
+        const sampleData = {
+          "1d": {
+            price: 187.2,
+            change: 1.75,
+            percent: "0.94%",
+            confidence: 65,
+            direction: "positive",
+          },
+          "1w": {
+            price: 192.75,
+            change: 7.3,
+            percent: "3.94%",
+            confidence: 78,
+            direction: "positive",
+          },
+          "1m": {
+            price: 201.5,
+            change: 16.05,
+            percent: "8.66%",
+            confidence: 72,
+            direction: "positive",
+          },
+          "3m": {
+            price: 215.25,
+            change: 29.8,
+            percent: "16.07%",
+            confidence: 68,
+            direction: "positive",
+          },
+          "1y": {
+            price: 275.0,
+            change: 89.55,
+            percent: "48.29%",
+            confidence: 60,
+            direction: "positive",
+          },
+        };
+
+        // Sample analysis text based on model
+        const analysisText = {
+          lstm: `Our LSTM neural network has detected patterns in the historical price data suggesting ${timeframeMap[timeframe]} growth. 
+                        The model is ${sampleData[timeframe].confidence}% confident in this prediction based on recent volatility and volume patterns.`,
+
+          arima: `The ARIMA model forecasts ${timeframeMap[timeframe]} performance based on statistical trends. 
+                          This prediction has a ${sampleData[timeframe].confidence}% confidence interval, accounting for seasonality in food delivery demand.`,
+
+          prophet: `Facebook Prophet's additive model predicts ${timeframeMap[timeframe]} growth, considering holidays and special events. 
+                            The ${sampleData[timeframe].confidence}% confidence level reflects recent market stability.`,
+
+          ensemble: `Our ensemble model combining multiple approaches predicts ${timeframeMap[timeframe]} performance. 
+                             With ${sampleData[timeframe].confidence}% confidence, this weighted prediction considers technical and fundamental factors.`,
+        };
+
+        // Update the results display
+        document.getElementById("result-timeframe").textContent =
+          timeframeMap[timeframe];
+        document.getElementById("result-model").textContent = modelMap[model];
+        document.getElementById("result-price").textContent =
+          sampleData[timeframe].price.toFixed(2);
+
+        const changeElement = document.getElementById("result-change");
+        changeElement.textContent = `(${
+          sampleData[timeframe].change >= 0 ? "+" : ""
+        }${sampleData[timeframe].change.toFixed(2)}, ${
+          sampleData[timeframe].percent
+        })`;
+        changeElement.className = sampleData[timeframe].direction;
+
+        document.querySelector(
+          ".confidence"
+        ).innerHTML = `<strong>Confidence Level:</strong> ${sampleData[timeframe].confidence}%`;
+        document.querySelector(
+          ".confidence-level"
+        ).style.width = `${sampleData[timeframe].confidence}%`;
+        document.getElementById("analysis").textContent = analysisText[model];
+      }
+    </script>
+  </body>
+</html>
